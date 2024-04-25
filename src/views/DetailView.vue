@@ -1,11 +1,14 @@
 <template>
-  <div class="detail flex flex-col items-center justify-center space-y-4 px-12">
-    <img :src="news.urlToImage" alt="gambar berita" class="object-cover h-64 w-full rounded-lg shadow-md">
-    <h1 class="text-3xl font-bold">{{ news.title }}</h1>
-    <p class="text-sm text-gray-500">{{ news.publishedAt }}</p>
-    <p class="text-lg font-semibold">{{ news.author }}</p>
-    <p class="text-base text-gray-700">{{ news.content ?? news.description }}</p>
-  </div>
+  <v-container class="detail">
+    <v-btn color="primary" @click="back">Kembali</v-btn>
+    <v-img :src="news.urlToImage" aspect-ratio="2.75" class="my-4"></v-img>
+    <v-card class="pa-4">
+      <v-card-title class="headline">{{ news.title }}</v-card-title>
+      <v-card-subtitle class="subtitle-1">{{ news.publishedAt }}</v-card-subtitle>
+      <v-card-text class="body-1">{{ news.author }}</v-card-text>
+      <v-card-text>{{ news.content ?? news.description }}</v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -19,12 +22,20 @@ export default {
   methods:{
     getNews(){
       this.$store.dispatch('fetchNewsData')
-      console.log(this.$route.params.title)
-      console.log(this.$store.state.newsData.filter(news => news.title === this.$route.params.title)[0])
     },
+    back(){
+      this.$router.push('/')
+    }
   },
   mounted() {
     this.getNews()
   }
 }
 </script>
+
+<style scoped>
+.detail {
+  max-width: 800px;
+  margin: auto;
+}
+</style>

@@ -1,23 +1,41 @@
 <template>
   <div class="home">
-    <h1 class="text-2xl m-4 text-center font-bold">Berita Terkini</h1>
-    <div class="grid grid-cols-1 md:grid-cols-1 gap-4 p-4 md:w-full lg:grid-cols-2 lg:px-16">
-      <NewsCard v-for="news in listNews" :key="news.title"
-                :title="news.title" :description="news.description"
+    <h1>Berita Terkini</h1>
+    <div v-if="isLoading">
+      <v-sheet
+          color="grey"
+          class="pa-3"
+      >
+        <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+        ></v-skeleton-loader>
+      </v-sheet>
+    </div>
+    <v-layout row wrap v-else>
+      <v-flex xs12 sm6 md4 lg3 v-for="news in listNews" :key="news.title">
+        <MyCard :title="news.title" :description="news.description"
                 :author="news.author" :imageUrl="news.urlToImage"
                 @on-click="moveToDetail(news)"/>
-    </div>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
 <script>
 
-import NewsCard from '@/components/Card.vue'
+import MyCard from "@/components/MyCard.vue";
 
 export default {
   name: 'HomeView',
   components: {
-    NewsCard
+    MyCard,
+  },
+  data() {
+    return {
+      isLoading: true
+    }
   },
   computed:{
     listNews(){
@@ -25,8 +43,15 @@ export default {
     }
   },
   methods:{
-    getNews(){
-      this.$store.dispatch('fetchNewsData')
+    async getNews(){
+      try {
+        this.isLoading = true;
+        await this.$store.dispatch('fetchNewsData');
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     moveToDetail(news){
       this.$store.dispatch('selectNews', news);

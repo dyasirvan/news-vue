@@ -1,7 +1,10 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <v-app id="app">
+    <NavigationDrawer />
+    <v-content class="ml-4">
+      <router-view/>
+    </v-content>
+  </v-app>
 </template>
 
 <style>
@@ -14,3 +17,14 @@
   margin-top: 60px;
 }
 </style>
+
+<script>
+import NavigationDrawer from './components/NavigationDrawer.vue';
+
+export default {
+  components: {
+    NavigationDrawer,
+  },
+  // the rest of your script
+};
+</script>
