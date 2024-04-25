@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-      v-model="drawer"
+      v-model="showDrawer"
       app
   >
     <v-list dense>
@@ -21,6 +21,7 @@
 export default {
   data: () => ({
     drawer: null,
+    showDrawer: true,
   }),
   computed: {
     sources() {
@@ -35,5 +36,12 @@ export default {
   created() {
     this.$store.dispatch('sources');
   },
+  watch: {
+    $route(to) {
+      this.$nextTick(() => {
+        this.showDrawer = to.name !== 'detail';
+      });
+    }
+  }
 };
 </script>
